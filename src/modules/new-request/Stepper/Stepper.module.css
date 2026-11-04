@@ -1,0 +1,34 @@
+.stepperHeader {
+  width: 100%;
+}
+
+.stepperContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.stepperContent {
+  margin-block: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.actionsContainer {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+@media (max-width: 767px) {
+  .actionsContainer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .actionsContainer > * {
+    width: 100%;
+  }
+}

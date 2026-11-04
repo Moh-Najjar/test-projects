@@ -1,0 +1,1 @@
+export { authorizedRoutes } from './protectedRoutes';

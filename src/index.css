@@ -1,0 +1,205 @@
+/* Register the bundled font so it can be used by name in font-family stacks. */
+@font-face {
+  font-family: 'LamaSans';
+  src: url('./assets/fonts/LamaSans-SemiBold.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'LamaSans';
+  src: url('./assets/fonts/LamaSans-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'LamaSans';
+  src: url('./assets/fonts/LamaSans-BlackCondensed.otf') format('opentype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Cairo';
+  src: url('./assets/fonts/Cairo/static/Cairo-ExtraLight.ttf') format('truetype');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Cairo';
+  src: url('./assets/fonts/Cairo/static/Cairo-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Cairo';
+  src: url('./assets/fonts/Cairo/static/Cairo-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Cairo';
+  src: url('./assets/fonts/Cairo/static/Cairo-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Cairo';
+  src: url('./assets/fonts/Cairo/static/Cairo-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Cairo';
+  src: url('./assets/fonts/Cairo/static/Cairo-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Cairo';
+  src: url('./assets/fonts/Cairo/static/Cairo-ExtraBold.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Cairo';
+  src: url('./assets/fonts/Cairo/static/Cairo-Black.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --font-en: 'Cairo', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+  --font-ar: 'Cairo', 'Tajawal', 'Arial', sans-serif;
+
+  --font-base: var(--font-ar);
+
+  font-family: var(--font-base);
+  line-height: 1.5;
+  font-weight: 400;
+
+  /* Theme-aware tokens — updated by html[data-theme] below. */
+  --app-bg: #ffffff;
+  --app-text: #111827;
+  --scrollbar-track: #ffffff;
+  --scrollbar-thumb: #3698BF;
+  --scrollbar-thumb-hover: #0367A6;
+  --scrollbar-thumb-active: #024a78;
+  --scrollbar-border: #ffffff;
+
+  color-scheme: light;
+  color: var(--app-text);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Ensure the app can use full viewport width/height.
+   overflow-x: hidden is intentionally set on body ONLY (not html).
+   Setting it on html activates html as the scroll container, which breaks
+   MUI's scroll-lock mechanism — Modal/Dialog/Drawer sets `body { overflow: hidden }`
+   to freeze the page, but if html is the scroll container that lock is ignored
+   and the background page remains scrollable while a dialog is open. */
+body {
+  overflow-x: hidden;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100%;
+}
+
+/* Dark theme overrides — synced from ThemeContext via html[data-theme]. */
+html[data-theme='dark'] {
+  --app-bg: #0B1623;
+  --app-text: #E3ECF7;
+  --scrollbar-track: #0B1623;
+  --scrollbar-thumb: #2A3E57;
+  --scrollbar-thumb-hover: #3A9BD5;
+  --scrollbar-thumb-active: #1F78B0;
+  --scrollbar-border: #0B1623;
+
+  color-scheme: dark;
+  color: var(--app-text);
+}
+
+/* Remove default spacing that can make layouts look "boxed in". */
+body {
+  margin: 0;
+  background: var(--app-bg);
+  color: var(--app-text);
+}
+
+/* Language-specific font family overrides update --font-base */
+html[lang='en'] {
+  --font-base: var(--font-en);
+  font-family: var(--font-base);
+}
+
+html[lang='ar'] {
+  --font-base: var(--font-ar);
+  font-family: var(--font-base);
+}
+
+/* Custom Scrollbar Styling */
+/* Webkit browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 12px; /* Width of the vertical scrollbar */
+  height: 12px; /* Height of the horizontal scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 6px;
+  border: 2px solid var(--scrollbar-border);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: var(--scrollbar-thumb-active);
+}
+
+/* Wide data tables stay usable on a phone by scrolling inside the table, not the page. */
+@media (max-width: 767px) {
+  .MuiTableContainer-root {
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+  }
+}
+
+/* Firefox scrollbar styling */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
