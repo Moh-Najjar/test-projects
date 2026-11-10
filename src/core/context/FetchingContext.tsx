@@ -123,7 +123,9 @@ export const FetchingContextProvider = ({ children }: { children: ReactNode }) =
         position={i18n.language === 'ar' ? 'top-right' : 'top-left'}
         autoClose={8000}
         hideProgressBar={false}
-        newestOnTop={i18n.language === 'ar'}
+        // Pile toasts so each new one is drawn on top of the previous ones.
+        // Leave newestOnTop off: in stacked mode the latest toast is the front card.
+        stacked
         closeOnClick
         rtl={i18n.language === 'ar'}
         pauseOnFocusLoss

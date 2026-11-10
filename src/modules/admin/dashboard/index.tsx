@@ -18,6 +18,7 @@ import {
   AccountTreeRounded as DirectoratesIcon,
   GroupsRounded as GroupsIcon,
   DynamicFormRounded as FormsIcon,
+  HistoryRounded as AuditIcon,
   AutoStoriesRounded as DocsIcon,
   ArrowForwardRounded as ArrowIcon,
   NorthEastRounded as OpenIcon,
@@ -74,6 +75,14 @@ const CARDS: DashboardCard[] = [
     icon: <FormsIcon />,
     tone: 'violet',
     actionKey: 'admin.dashboard.cards.forms.action',
+  },
+  {
+    labelKey: 'admin.dashboard.cards.audit.title',
+    descriptionKey: 'admin.dashboard.cards.audit.description',
+    path: '/admin/audit-logs',
+    icon: <AuditIcon />,
+    tone: 'emerald',
+    actionKey: 'admin.dashboard.cards.audit.action',
   },
 ];
 

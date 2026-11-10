@@ -1,0 +1,1506 @@
+{
+  "_description": "All API response shapes for Aseza Admin Portal. Success responses use the ApiResponse envelope (transform.interceptor.ts). 204 endpoints return no body. Error responses use the ApiErrorResponse envelope (http-exception.filter.ts).",
+
+  "Auth": {
+    "POST /auth/login": {
+      "200_OK": {
+        "success": true,
+        "statusCode": 200,
+        "message": "OK",
+        "data": {
+          "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJyb2xlIjoiQURNSU4iLCJqdGkiOiJhMWIyYzNkNC1lNWY2LTc4OTAtYWJjZC1lZjEyMzQ1Njc4OTAiLCJpYXQiOjE3NTIwMDAwMDAsImV4cCI6MTc1MjA4NjQwMH0.signature"
+        },
+        "timestamp": "2026-07-08T13:47:00.000Z"
+      },
+      "401_Unauthorized": {
+        "success": false,
+        "statusCode": 401,
+        "message": "Invalid credentials",
+        "error": "UNAUTHORIZED",
+        "path": "/auth/login",
+        "timestamp": "2026-07-08T13:47:00.000Z"
+      }
+    },
+    "POST /auth/logout": {
+      "204_No_Content": null,
+      "401_Unauthorized": {
+        "success": false,
+        "statusCode": 401,
+        "message": "Unauthorized",
+        "error": "UNAUTHORIZED",
+        "path": "/auth/logout",
+        "timestamp": "2026-07-08T13:47:00.000Z"
+      }
+    }
+  },
+
+  "Admin_Users": {
+    "GET /admin/users": {
+      "200_OK": {
+        "success": true,
+        "statusCode": 200,
+        "message": "OK",
+        "data": {
+          "items": [
+            {
+              "userId": 1,
+              "externalObjectId": null,
+              "username": "jdoe",
+              "fullNameEn": "John Doe",
+              "fullNameAr": "جون دو",
+              "email": "jdoe@example.com",
+              "isActive": true,
+              "lastLoginAt": "2026-07-07T10:00:00.000Z",
+              "createdAt": "2026-01-01T00:00:00.000Z",
+              "directorateId": 2,
+              "directorate": {
+                "directorateId": 2,
+                "directorateKey": "PLANNING",
+                "nameEn": "Planning Directorate",
+                "nameAr": "مديرية التخطيط",
+                "isActive": true,
+                "createdAt": "2026-01-01T00:00:00.000Z"
+              }
+            }
+          ],
+          "total": 1,
+          "page": 1,
+          "pageSize": 20,
+          "totalPages": 1
+        },
+        "timestamp": "2026-07-08T13:47:00.000Z"
+      }
+    },
+    "GET /admin/users/:userId/roles": {
+      "200_OK": {
+        "success": true,
+        "statusCode": 200,
+        "message": "OK",
+        "data": [
+          {
+            "userRoleId": 5,
+            "userId": 1,
+            "roleId": 2,
+            "assignedAt": "2026-03-15T08:30:00.000Z",
+            "role": {
+              "roleId": 2,
+              "roleKey": "SUPERVISOR",
+              "roleName": "Supervisor",
+              "description": "Can view and approve submissions",
+              "isActive": true,
+              "createdAt": "2026-01-01T00:00:00.000Z"
+            }
+          }
+        ],
+        "timestamp": "2026-07-08T13:47:00.000Z"
+      },
+      "404_Not_Found": {
+        "success": false,
+        "statusCode": 404,
+        "message": "User with id 999 not found",
+        "error": "NOT_FOUND",
+        "path": "/admin/users/999/roles",
+        "timestamp": "2026-07-08T13:47:00.000Z"
+      }
+    },
+    "POST /admin/users/:userId/roles": {
+      "201_Created": {
+        "success": true,
+        "statusCode": 201,
+        "message": "Created",
+        "data": {
+          "userRoleId": 6,
+          "userId": 1,
+          "roleId": 3,
+          "assignedAt": "2026-07-08T13:47:00.000Z"
+        },
+        "timestamp": "2026-07-08T13:47:00.000Z"
+      },
+      "404_Not_Found": {
+        "success": false,
+        "statusCode": 404,
+        "message": "Role with id 99 not found",
+        "error": "NOT_FOUND",
+        "path": "/admin/users/1/roles",
+        "timestamp": "2026-07-08T13:47:00.000Z"
+      },
+      "409_Conflict": {
+        "success": false,
+        "statusCode": 409,
+        "message": "User 1 already has role 2",
+        "error": "CONFLICT",
+        "path": "/admin/users/1/roles",
+        "timestamp": "2026-07-08T13:47:00.000Z"
+      }
+    },
+    "DELETE /admin/users/:userId/roles/:roleId": {
+      "204_No_Content": null,
+      "404_Not_Found": {
+        "success": false,
+        "statusCode": 404,
+        "message": "Role 2 is not assigned to user 1",
+        "error": "NOT_FOUND",
+        "path": "/admin/users/1/roles/2",
+        "timestamp": "2026-07-08T13:47:00.000Z"
+      }
+    },
+    "PUT /admin/users/:userId/directorate": {
+      "200_OK": {
+        "success": true,
+        "statusCode": 200,
+        "message": "OK",
+        "data": {
+          "userId": 1,
+          "externalObjectId": null,
+          "username": "jdoe",
+          "fullNameEn": "John Doe",
+          "fullNameAr": "جون دو",
+          "email": "jdoe@example.com",
+          "isActive": true,
+          "lastLoginAt": "2026-07-07T10:00:00.000Z",
+          "createdAt": "2026-01-01T00:00:00.000Z",
+          "directorateId": 3
+        },
+        "timestamp": "2026-07-08T13:47:00.000Z"
+      },
+      "404_Not_Found": {
+        "success": false,
+        "statusCode": 404,
+        "message": "User with id 999 not found",
+        "error": "NOT_FOUND",
+        "path": "/admin/users/999/directorate",
+        "timestamp": "2026-07-08T13:47:00.000Z"
+      }
+    }
+  },
+
+  "Admin_Roles": {
+    "GET /admin/roles": {
+      "200_OK": {
+        "success": true,
+        "statusCode": 200,
+        "message": "OK",
+        "data": [
+          {
+            "roleId": 1,
+            "roleKey": "ADMIN",
+            "roleName": "Administrator",
+            "description": "Full system access",
+            "isActive": true,
+            "createdAt": "2026-01-01T00:00:00.000Z"
+          },
+          {
+            "roleId": 2,
+            "roleKey": "SUPERVISOR",
+            "roleName": "Supervisor",
+            "description": "Can view and approve submissions",
+            "isActive": true,
+            "createdAt": "2026-01-01T00:00:00.000Z"
+          },
+          {
+            "roleId": 3,
+            "roleKey": "DATA_ENTRY",
+            "roleName": "Data Entry",
+            "description": "Can submit forms",
+            "isActive": true,
+            "createdAt": "2026-01-01T00:00:00.000Z"
+          }
+        ],
+        "timestamp": "2026-07-08T13:47:00.000Z"
+      }
+    }
+  },
+
+  "Admin_Directorates": {
+    "GET /admin/directorates": {
+      "200_OK": {
+        "success": true,
+        "statusCode": 200,
+        "message": "OK",
+        "data": [
+          {
+            "directorateId": 1,
+            "directorateKey": "ENGINEERING",
+            "nameEn": "Engineering Directorate",
+            "nameAr": "مديرية الهندسة",
+            "isActive": true,
+            "createdAt": "2026-01-01T00:00:00.000Z"
+          },
+          {
+            "directorateId": 2,
+            "directorateKey": "PLANNING",
+            "nameEn": "Planning Directorate",
+            "nameAr": "مديرية التخطيط",
+            "isActive": true,
+            "createdAt": "2026-01-01T00:00:00.000Z"
+          }
+        ],
+        "timestamp": "2026-07-08T13:47:00.000Z"
+      }
+    },
+    "POST /admin/directorates": {
+      "201_Created": {
+        "success": true,
+        "statusCode": 201,
+        "message": "Created",
+        "data": {
+          "directorateId": 3,
+          "directorateKey": "DIRECTORATE_001",
+          "nameEn": "Information Technology Directorate",
+          "nameAr": "مديرية تكنولوجيا المعلومات",
+          "isActive": true,
+          "createdAt": "2026-07-08T13:47:00.000Z"
+        },
+        "timestamp": "2026-07-08T13:47:00.000Z"
+      },
+      "409_Conflict": {
+        "success": false,
+        "statusCode": 409,
+        "message": "Directorate with key DIRECTORATE_001 already exists",
+        "error": "CONFLICT",
+        "path": "/admin/directorates",
+        "timestamp": "2026-07-08T13:47:00.000Z"
+      }
+    },
+    "GET /admin/directorates/:id/forms": {
+      "200_OK": {
+        "success": true,
+        "statusCode": 200,
+        "message": "OK",
+        "data": [
+          {
+            "accessId": 1,
+            "directorateId": 1,
+            "formId": 1,
+            "canView": true,
+            "canSubmit": true,
+            "canApprove": false,
+            "grantedAt": "2026-02-01T00:00:00.000Z",
+            "form": {
+              "formId": 1,
+              "formKey": "PERMIT_REQUEST",
+              "nameEn": "Permit Request",
+              "nameAr": "طلب تصريح",
+              "descriptionEn": "Form for submitting a new permit request",
+              "descriptionAr": "نموذج لتقديم طلب تصريح جديد",
+              "isActive": true,
+              "version": 1,
+              "effectiveFrom": "2026-01-01",
+              "effectiveTo": "2026-12-31",
+              "createdAt": "2026-01-15T00:00:00.000Z",
+              "updatedAt": null,
+              "directorateId": 1,
+              "frequencyId": 1,
+              "createdByUserId": 1,
+              "updatedByUserId": null
+            }
+          }
+        ],
+        "timestamp": "2026-07-08T13:47:00.000Z"
+      },
+      "404_Not_Found": {
+        "success": false,
+        "statusCode": 404,
+        "message": "Directorate with id 99 not found",
+        "error": "NOT_FOUND",
+        "path": "/admin/directorates/99/forms",
+        "timestamp": "2026-07-08T13:47:00.000Z"
+      }
+    },
+    "POST /admin/directorates/:id/forms": {
+      "201_Created": {
+        "success": true,
+        "statusCode": 201,
+        "message": "Created",
+        "data": {
+          "accessId": 2,
+          "directorateId": 1,
+          "formId": 2,
+          "canView": true,
+          "canSubmit": true,
+          "canApprove": false,
+          "grantedAt": "2026-07-08T13:47:00.000Z"
+        },
+        "timestamp": "2026-07-08T13:47:00.000Z"
+      },
+      "404_Not_Found": {
+        "success": false,
+        "statusCode": 404,
+        "message": "Form with id 99 not found",
+        "error": "NOT_FOUND",
+        "path": "/admin/directorates/1/forms",
+        "timestamp": "2026-07-08T13:47:00.000Z"
+      }
+    },
+    "DELETE /admin/directorates/:id/forms/:formId": {
+      "204_No_Content": null,
+      "404_Not_Found": {
+        "success": false,
+        "statusCode": 404,
+        "message": "Form 2 is not assigned to directorate 1",
+        "error": "NOT_FOUND",
+        "path": "/admin/directorates/1/forms/2",
+        "timestamp": "2026-07-08T13:47:00.000Z"
+      }
+    },
+    "GET /admin/forms (active dropdown)": {
+      "200_OK": {
+        "success": true,
+        "statusCode": 200,
+        "message": "OK",
+        "data": [
+          {
+            "formId": 1,
+            "formKey": "PERMIT_REQUEST",
+            "nameEn": "Permit Request",
+            "nameAr": "طلب تصريح",
+            "descriptionEn": "Form for submitting a new permit request",
+            "descriptionAr": "نموذج لتقديم طلب تصريح جديد",
+            "isActive": true,
+            "version": 1,
+            "effectiveFrom": "2026-01-01",
+            "effectiveTo": "2026-12-31",
+            "createdAt": "2026-01-15T00:00:00.000Z",
+            "updatedAt": null,
+            "directorateId": 1,
+            "frequencyId": 1,
+            "createdByUserId": 1,
+            "updatedByUserId": null
+          }
+        ],
+        "timestamp": "2026-07-08T13:47:00.000Z"
+      }
+    }
+  },
+
+  "Admin_External_Group_Role_Mappings": {
+    "GET /admin/external-group-role-mappings": {
+      "200_OK": {
+        "success": true,
+        "statusCode": 200,
+        "message": "OK",
+        "data": [
+          {
+            "mappingId": 1,
+            "groupObjectId": "azure-group-object-id",
+            "groupKey": "IT_ADMIN_GROUP",
+            "groupNameEn": "IT Administrators",
+            "groupNameAr": "مسؤولو تكنولوجيا المعلومات",
+            "roleId": 1,
+            "directorateId": 2,
+            "isActive": true,
+            "createdAt": "2026-07-08T13:47:00.000Z",
+            "role": {
+              "roleId": 1,
+              "roleKey": "ADMIN",
+              "roleName": "Administrator",
+              "description": "Full system access",
+              "isActive": true
+            },
+            "directorate": {
+              "directorateId": 2,
+              "directorateKey": "PLANNING",
+              "nameEn": "Planning Directorate",
+              "nameAr": "مديرية التخطيط",
+              "isActive": true
+            }
+          }
+        ],
+        "timestamp": "2026-07-08T13:47:00.000Z"
+      }
+    },
+    "POST /admin/external-group-role-mappings": {
+      "201_Created": {
+        "success": true,
+        "statusCode": 201,
+        "message": "Created",
+        "data": {
+          "mappingId": 1,
+          "groupObjectId": "azure-group-object-id",
+          "groupKey": "IT_ADMIN_GROUP",
+          "groupNameEn": "IT Administrators",
+          "groupNameAr": "مسؤولو تكنولوجيا المعلومات",
+          "roleId": 1,
+          "directorateId": 2,
+          "isActive": true,
+          "createdAt": "2026-07-08T13:47:00.000Z"
+        },
+        "timestamp": "2026-07-08T13:47:00.000Z"
+      },
+      "404_Not_Found": {
+        "success": false,
+        "statusCode": 404,
+        "message": "Role with id 99 not found",
+        "error": "NOT_FOUND",
+        "path": "/admin/external-group-role-mappings",
+        "timestamp": "2026-07-08T13:47:00.000Z"
+      },
+      "409_Conflict": {
+        "success": false,
+        "statusCode": 409,
+        "message": "Mapping for group IT_ADMIN_GROUP already exists",
+        "error": "CONFLICT",
+        "path": "/admin/external-group-role-mappings",
+        "timestamp": "2026-07-08T13:47:00.000Z"
+      }
+    }
+  },
+
+  "Admin_Forms": {
+    "GET /admin/forms/all": {
+      "200_OK": {
+        "success": true,
+        "statusCode": 200,
+        "message": "OK",
+        "data": [
+          {
+            "formId": 1,
+            "formKey": "PERMIT_REQUEST",
+            "nameEn": "Permit Request",
+            "nameAr": "طلب تصريح",
+            "descriptionEn": "Form for submitting a new permit request",
+            "descriptionAr": "نموذج لتقديم طلب تصريح جديد",
+            "isActive": true,
+            "version": 1,
+            "effectiveFrom": "2026-01-01",
+            "effectiveTo": "2026-12-31",
+            "createdAt": "2026-01-15T00:00:00.000Z",
+            "updatedAt": null,
+            "directorateId": 1,
+            "frequencyId": 1,
+            "createdByUserId": 1,
+            "updatedByUserId": null,
+            "directorate": {
+              "directorateId": 1,
+              "directorateKey": "ENGINEERING",
+              "nameEn": "Engineering Directorate",
+              "nameAr": "مديرية الهندسة",
+              "isActive": true,
+              "createdAt": "2026-01-01T00:00:00.000Z"
+            },
+            "frequency": {
+              "frequencyId": 1,
+              "code": "MONTHLY",
+              "nameEn": "Monthly",
+              "nameAr": "شهري",
+              "description": null,
+              "isActive": true,
+              "createdAt": "2026-01-01T00:00:00.000Z"
+            }
+          },
+          {
+            "formId": 2,
+            "formKey": "ANNUAL_REPORT",
+            "nameEn": "Annual Report",
+            "nameAr": "التقرير السنوي",
+            "descriptionEn": null,
+            "descriptionAr": null,
+            "isActive": false,
+            "version": 2,
+            "effectiveFrom": "2025-01-01",
+            "effectiveTo": "2025-12-31",
+            "createdAt": "2025-01-01T00:00:00.000Z",
+            "updatedAt": "2026-01-01T00:00:00.000Z",
+            "directorateId": 2,
+            "frequencyId": 3,
+            "createdByUserId": 1,
+            "updatedByUserId": 1,
+            "directorate": {
+              "directorateId": 2,
+              "directorateKey": "PLANNING",
+              "nameEn": "Planning Directorate",
+              "nameAr": "مديرية التخطيط",
+              "isActive": true,
+              "createdAt": "2026-01-01T00:00:00.000Z"
+            },
+            "frequency": {
+              "frequencyId": 3,
+              "code": "ANNUALLY",
+              "nameEn": "Annually",
+              "nameAr": "سنويًا",
+              "description": null,
+              "isActive": true,
+              "createdAt": "2026-01-01T00:00:00.000Z"
+            }
+          }
+        ],
+        "timestamp": "2026-07-08T13:47:00.000Z"
+      }
+    },
+    "GET /admin/forms/:formId": {
+      "200_OK": {
+        "success": true,
+        "statusCode": 200,
+        "message": "OK",
+        "data": {
+          "formId": 1,
+          "formKey": "PERMIT_REQUEST",
+          "nameEn": "Permit Request",
+          "nameAr": "طلب تصريح",
+          "descriptionEn": "Form for submitting a new permit request",
+          "descriptionAr": "نموذج لتقديم طلب تصريح جديد",
+          "isActive": true,
+          "version": 1,
+          "effectiveFrom": "2026-01-01",
+          "effectiveTo": "2026-12-31",
+          "createdAt": "2026-01-15T00:00:00.000Z",
+          "updatedAt": null,
+          "directorateId": 1,
+          "frequencyId": 1,
+          "createdByUserId": 1,
+          "updatedByUserId": null,
+          "directorate": {
+            "directorateId": 1,
+            "directorateKey": "ENGINEERING",
+            "nameEn": "Engineering Directorate",
+            "nameAr": "مديرية الهندسة",
+            "isActive": true,
+            "createdAt": "2026-01-01T00:00:00.000Z"
+          },
+          "frequency": {
+            "frequencyId": 1,
+            "code": "MONTHLY",
+            "nameEn": "Monthly",
+            "nameAr": "شهري",
+            "description": null,
+            "isActive": true,
+            "createdAt": "2026-01-01T00:00:00.000Z"
+          },
+          "formFields": [
+            {
+              "fieldId": 1,
+              "formId": 1,
+              "fieldKey": "APPLICANT_NAME",
+              "labelEn": "Applicant Name",
+              "labelAr": "اسم مقدم الطلب",
+              "isRequired": true,
+              "minValue": null,
+              "maxValue": null,
+              "minLength": null,
+              "maxLength": 200,
+              "regexPattern": null,
+              "placeholderEn": "Enter full name",
+              "placeholderAr": "أدخل الاسم الكامل",
+              "defaultValue": null,
+              "displayOrder": 1,
+              "helpTextEn": "Enter your full legal name",
+              "helpTextAr": "أدخل اسمك القانوني الكامل",
+              "isReadOnly": false,
+              "isVisible": true,
+              "validationMessageEn": null,
+              "validationMessageAr": null,
+              "createdAt": "2026-01-15T00:00:00.000Z",
+              "dataTypeId": 1,
+              "controlTypeId": 1,
+              "lookupTypeId": null,
+              "kpiId": null,
+              "fieldOptions": [],
+              "fieldDependencies": [],
+              "formFieldColumns": [],
+              "formFieldRows": [],
+              "formFieldCalculations": null
+            },
+            {
+              "fieldId": 2,
+              "formId": 1,
+              "fieldKey": "PERMIT_TYPE",
+              "labelEn": "Permit Type",
+              "labelAr": "نوع التصريح",
+              "isRequired": true,
+              "minValue": null,
+              "maxValue": null,
+              "minLength": null,
+              "maxLength": null,
+              "regexPattern": null,
+              "placeholderEn": null,
+              "placeholderAr": null,
+              "defaultValue": null,
+              "displayOrder": 2,
+              "helpTextEn": null,
+              "helpTextAr": null,
+              "isReadOnly": false,
+              "isVisible": true,
+              "validationMessageEn": null,
+              "validationMessageAr": null,
+              "createdAt": "2026-01-15T00:00:00.000Z",
+              "dataTypeId": 1,
+              "controlTypeId": 3,
+              "lookupTypeId": null,
+              "kpiId": null,
+              "fieldOptions": [
+                {
+                  "optionId": 1,
+                  "fieldId": 2,
+                  "optionKey": "BUILDING",
+                  "optionLabelEn": "Building Permit",
+                  "optionLabelAr": "تصريح بناء",
+                  "optionValue": "BUILDING",
+                  "displayOrder": 1,
+                  "isActive": true,
+                  "createdAt": "2026-01-15T00:00:00.000Z"
+                },
+                {
+                  "optionId": 2,
+                  "fieldId": 2,
+                  "optionKey": "DEMOLITION",
+                  "optionLabelEn": "Demolition Permit",
+                  "optionLabelAr": "تصريح هدم",
+                  "optionValue": "DEMOLITION",
+                  "displayOrder": 2,
+                  "isActive": true,
+                  "createdAt": "2026-01-15T00:00:00.000Z"
+                }
+              ],
+              "fieldDependencies": [],
+              "formFieldColumns": [],
+              "formFieldRows": [],
+              "formFieldCalculations": null
+            },
+            {
+              "fieldId": 3,
+              "formId": 1,
+              "fieldKey": "BUILDING_AREA",
+              "labelEn": "Building Area",
+              "labelAr": "مساحة البناء",
+              "isRequired": true,
+              "minValue": null,
+              "maxValue": null,
+              "minLength": null,
+              "maxLength": null,
+              "regexPattern": null,
+              "placeholderEn": null,
+              "placeholderAr": null,
+              "defaultValue": null,
+              "displayOrder": 3,
+              "helpTextEn": null,
+              "helpTextAr": null,
+              "isReadOnly": false,
+              "isVisible": true,
+              "validationMessageEn": null,
+              "validationMessageAr": null,
+              "createdAt": "2026-01-15T00:00:00.000Z",
+              "dataTypeId": 2,
+              "controlTypeId": 7,
+              "lookupTypeId": null,
+              "kpiId": null,
+              "fieldOptions": [],
+              "fieldDependencies": [
+                {
+                  "dependencyId": 1,
+                  "fieldId": 3,
+                  "dependsOnFieldId": 2,
+                  "conditionOperator": "EQ",
+                  "conditionValue": "BUILDING",
+                  "action": "SHOW",
+                  "createdAt": "2026-01-15T00:00:00.000Z"
+                }
+              ],
+              "formFieldColumns": [],
+              "formFieldRows": [],
+              "formFieldCalculations": null
+            },
+            {
+              "fieldId": 4,
+              "formId": 1,
+              "fieldKey": "COST_CALC",
+              "labelEn": "Cost Calculation",
+              "labelAr": "حساب التكلفة",
+              "isRequired": false,
+              "minValue": null,
+              "maxValue": null,
+              "minLength": null,
+              "maxLength": null,
+              "regexPattern": null,
+              "placeholderEn": null,
+              "placeholderAr": null,
+              "defaultValue": null,
+              "displayOrder": 4,
+              "helpTextEn": null,
+              "helpTextAr": null,
+              "isReadOnly": true,
+              "isVisible": true,
+              "validationMessageEn": null,
+              "validationMessageAr": null,
+              "createdAt": "2026-01-15T00:00:00.000Z",
+              "dataTypeId": 2,
+              "controlTypeId": 7,
+              "lookupTypeId": null,
+              "kpiId": null,
+              "fieldOptions": [],
+              "fieldDependencies": [],
+              "formFieldColumns": [],
+              "formFieldRows": [],
+              "formFieldCalculations": {
+                "calculationId": 1,
+                "fieldId": 4,
+                "formulaExpression": "A * B",
+                "resultColumnKey": "TOTAL",
+                "resultLabelEn": "Total Amount",
+                "resultLabelAr": "المبلغ الإجمالي",
+                "resultPrecision": 2,
+                "buttonLabelEn": "Calculate",
+                "buttonLabelAr": "احسب",
+                "helpTextEn": "Area multiplied by rate",
+                "helpTextAr": "المساحة مضروبة بالسعر",
+                "displayFormulaEn": "Total = Area × Rate",
+                "displayFormulaAr": "الإجمالي = المساحة × السعر",
+                "isActive": true,
+                "createdAt": "2026-01-15T00:00:00.000Z",
+                "resultDataTypeId": 2,
+                "resultControlTypeId": 1,
+                "formFieldCalculationInputs": [
+                  {
+                    "inputId": 1,
+                    "calculationId": 1,
+                    "inputToken": "A",
+                    "columnKey": "AREA",
+                    "labelEn": "Area (m²)",
+                    "labelAr": "المساحة (م²)",
+                    "placeholderEn": null,
+                    "placeholderAr": null,
+                    "displayOrder": 1,
+                    "isRequired": true,
+                    "isReadOnly": false,
+                    "isVisible": true,
+                    "validationMessageEn": null,
+                    "validationMessageAr": null,
+                    "isActive": true,
+                    "createdAt": "2026-01-15T00:00:00.000Z",
+                    "dataTypeId": 2,
+                    "controlTypeId": 1
+                  },
+                  {
+                    "inputId": 2,
+                    "calculationId": 1,
+                    "inputToken": "B",
+                    "columnKey": "RATE",
+                    "labelEn": "Rate per m²",
+                    "labelAr": "السعر لكل م²",
+                    "placeholderEn": null,
+                    "placeholderAr": null,
+                    "displayOrder": 2,
+                    "isRequired": true,
+                    "isReadOnly": false,
+                    "isVisible": true,
+                    "validationMessageEn": null,
+                    "validationMessageAr": null,
+                    "isActive": true,
+                    "createdAt": "2026-01-15T00:00:00.000Z",
+                    "dataTypeId": 2,
+                    "controlTypeId": 1
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "timestamp": "2026-07-08T13:47:00.000Z"
+      },
+      "404_Not_Found": {
+        "success": false,
+        "statusCode": 404,
+        "message": "Form with id 999 not found",
+        "error": "NOT_FOUND",
+        "path": "/admin/forms/999",
+        "timestamp": "2026-07-08T13:47:00.000Z"
+      }
+    },
+    "POST /admin/forms": {
+      "201_Created": {
+        "success": true,
+        "statusCode": 201,
+        "message": "Created",
+        "data": {
+          "formId": 3,
+          "formKey": "PERMIT_REQUEST",
+          "nameEn": "Permit Request",
+          "nameAr": "طلب تصريح",
+          "descriptionEn": "Form for submitting a new permit request",
+          "descriptionAr": "نموذج لتقديم طلب تصريح جديد",
+          "isActive": true,
+          "version": 1,
+          "effectiveFrom": "2026-01-01",
+          "effectiveTo": "2026-12-31",
+          "createdAt": "2026-07-08T13:47:00.000Z",
+          "updatedAt": null,
+          "directorateId": 1,
+          "frequencyId": 1,
+          "createdByUserId": 1,
+          "updatedByUserId": null
+        },
+        "timestamp": "2026-07-08T13:47:00.000Z"
+      },
+      "400_Bad_Request": {
+        "success": false,
+        "statusCode": 400,
+        "message": [
+          "formKey must be a string",
+          "nameEn should not be empty"
+        ],
+        "error": "BAD_REQUEST",
+        "path": "/admin/forms",
+        "timestamp": "2026-07-08T13:47:00.000Z"
+      },
+      "409_Conflict": {
+        "success": false,
+        "statusCode": 409,
+        "message": "A form with formKey \"PERMIT_REQUEST\" already exists",
+        "error": "CONFLICT",
+        "path": "/admin/forms",
+        "timestamp": "2026-07-08T13:47:00.000Z"
+      }
+    },
+    "PATCH /admin/forms/:formId": {
+      "200_OK": {
+        "success": true,
+        "statusCode": 200,
+        "message": "OK",
+        "data": {
+          "formId": 1,
+          "formKey": "PERMIT_REQUEST",
+          "nameEn": "Updated Permit Request",
+          "nameAr": "طلب تصريح",
+          "descriptionEn": "Form for submitting a new permit request",
+          "descriptionAr": "نموذج لتقديم طلب تصريح جديد",
+          "isActive": true,
+          "version": 1,
+          "effectiveFrom": "2026-01-01",
+          "effectiveTo": "2026-12-31",
+          "createdAt": "2026-01-15T00:00:00.000Z",
+          "updatedAt": "2026-07-08T13:47:00.000Z",
+          "directorateId": 1,
+          "frequencyId": 1,
+          "createdByUserId": 1,
+          "updatedByUserId": 1
+        },
+        "timestamp": "2026-07-08T13:47:00.000Z"
+      }
+    },
+    "DELETE /admin/forms/:formId (soft-delete)": {
+      "200_OK": {
+        "success": true,
+        "statusCode": 200,
+        "message": "OK",
+        "data": {
+          "formId": 1,
+          "formKey": "PERMIT_REQUEST",
+          "nameEn": "Permit Request",
+          "nameAr": "طلب تصريح",
+          "descriptionEn": "Form for submitting a new permit request",
+          "descriptionAr": "نموذج لتقديم طلب تصريح جديد",
+          "isActive": false,
+          "version": 1,
+          "effectiveFrom": "2026-01-01",
+          "effectiveTo": "2026-12-31",
+          "createdAt": "2026-01-15T00:00:00.000Z",
+          "updatedAt": null,
+          "directorateId": 1,
+          "frequencyId": 1,
+          "createdByUserId": 1,
+          "updatedByUserId": null
+        },
+        "timestamp": "2026-07-08T13:47:00.000Z"
+      }
+    }
+  },
+
+  "Admin_Fields": {
+    "GET /admin/forms/:formId/fields": {
+      "200_OK": {
+        "success": true,
+        "statusCode": 200,
+        "message": "OK",
+        "data": [
+          {
+            "fieldId": 1,
+            "formId": 1,
+            "fieldKey": "APPLICANT_NAME",
+            "labelEn": "Applicant Name",
+            "labelAr": "اسم مقدم الطلب",
+            "isRequired": true,
+            "minValue": null,
+            "maxValue": null,
+            "minLength": null,
+            "maxLength": 200,
+            "regexPattern": null,
+            "placeholderEn": "Enter full name",
+            "placeholderAr": "أدخل الاسم الكامل",
+            "defaultValue": null,
+            "displayOrder": 1,
+            "helpTextEn": "Enter your full legal name",
+            "helpTextAr": "أدخل اسمك القانوني الكامل",
+            "isReadOnly": false,
+            "isVisible": true,
+            "validationMessageEn": null,
+            "validationMessageAr": null,
+            "createdAt": "2026-01-15T00:00:00.000Z",
+            "dataTypeId": 1,
+            "controlTypeId": 1,
+            "lookupTypeId": null,
+            "kpiId": null,
+            "fieldOptions": [],
+            "fieldDependencies": [],
+            "formFieldColumns": [],
+            "formFieldRows": [],
+            "formFieldCalculations": null
+          }
+        ],
+        "timestamp": "2026-07-08T13:47:00.000Z"
+      }
+    },
+    "POST /admin/forms/:formId/fields": {
+      "201_Created": {
+        "success": true,
+        "statusCode": 201,
+        "message": "Created",
+        "data": {
+          "fieldId": 5,
+          "formId": 1,
+          "fieldKey": "APPLICANT_NAME",
+          "labelEn": "Applicant Name",
+          "labelAr": "اسم مقدم الطلب",
+          "isRequired": true,
+          "minValue": null,
+          "maxValue": null,
+          "minLength": null,
+          "maxLength": 200,
+          "regexPattern": null,
+          "placeholderEn": "Enter full name",
+          "placeholderAr": "أدخل الاسم الكامل",
+          "defaultValue": null,
+          "displayOrder": 1,
+          "helpTextEn": "Enter your full legal name",
+          "helpTextAr": "أدخل اسمك القانوني الكامل",
+          "isReadOnly": false,
+          "isVisible": true,
+          "validationMessageEn": null,
+          "validationMessageAr": null,
+          "createdAt": "2026-07-08T13:47:00.000Z",
+          "dataTypeId": 1,
+          "controlTypeId": 1,
+          "lookupTypeId": null,
+          "kpiId": null
+        },
+        "timestamp": "2026-07-08T13:47:00.000Z"
+      }
+    },
+    "PATCH /admin/forms/:formId/fields/:fieldId": {
+      "200_OK": {
+        "success": true,
+        "statusCode": 200,
+        "message": "OK",
+        "data": {
+          "fieldId": 1,
+          "formId": 1,
+          "fieldKey": "APPLICANT_NAME",
+          "labelEn": "Full Applicant Name",
+          "labelAr": "اسم مقدم الطلب",
+          "isRequired": true,
+          "minValue": null,
+          "maxValue": null,
+          "minLength": null,
+          "maxLength": 200,
+          "regexPattern": null,
+          "placeholderEn": "Enter full name",
+          "placeholderAr": "أدخل الاسم الكامل",
+          "defaultValue": null,
+          "displayOrder": 2,
+          "helpTextEn": "Enter your full legal name",
+          "helpTextAr": "أدخل اسمك القانوني الكامل",
+          "isReadOnly": false,
+          "isVisible": true,
+          "validationMessageEn": null,
+          "validationMessageAr": null,
+          "createdAt": "2026-01-15T00:00:00.000Z",
+          "dataTypeId": 1,
+          "controlTypeId": 1,
+          "lookupTypeId": null,
+          "kpiId": null
+        },
+        "timestamp": "2026-07-08T13:47:00.000Z"
+      }
+    },
+    "DELETE /admin/forms/:formId/fields/:fieldId": {
+      "204_No_Content": null
+    },
+    "POST /admin/forms/:formId/fields/:fieldId/options": {
+      "201_Created": {
+        "success": true,
+        "statusCode": 201,
+        "message": "Created",
+        "data": {
+          "optionId": 3,
+          "fieldId": 1,
+          "optionKey": "OPTION_YES",
+          "optionLabelEn": "Yes",
+          "optionLabelAr": "نعم",
+          "optionValue": "YES",
+          "displayOrder": 1,
+          "isActive": true,
+          "createdAt": "2026-07-08T13:47:00.000Z"
+        },
+        "timestamp": "2026-07-08T13:47:00.000Z"
+      }
+    },
+    "DELETE /admin/forms/:formId/fields/:fieldId/options/:optionId": {
+      "204_No_Content": null
+    },
+    "POST /admin/forms/:formId/fields/:fieldId/dependencies": {
+      "201_Created": {
+        "success": true,
+        "statusCode": 201,
+        "message": "Created",
+        "data": {
+          "dependencyId": 2,
+          "fieldId": 3,
+          "dependsOnFieldId": 2,
+          "conditionOperator": "EQ",
+          "conditionValue": "YES",
+          "action": "SHOW",
+          "createdAt": "2026-07-08T13:47:00.000Z"
+        },
+        "timestamp": "2026-07-08T13:47:00.000Z"
+      }
+    },
+    "DELETE /admin/forms/:formId/fields/:fieldId/dependencies/:dependencyId": {
+      "204_No_Content": null
+    },
+    "POST /admin/forms/:formId/fields/:fieldId/columns": {
+      "201_Created": {
+        "success": true,
+        "statusCode": 201,
+        "message": "Created",
+        "data": {
+          "columnId": 1,
+          "fieldId": 1,
+          "columnKey": "QUANTITY",
+          "labelEn": "Quantity",
+          "labelAr": "الكمية",
+          "displayOrder": 1,
+          "dataTypeId": 2,
+          "controlTypeId": 1,
+          "lookupTypeId": null
+        },
+        "timestamp": "2026-07-08T13:47:00.000Z"
+      }
+    },
+    "DELETE /admin/forms/:formId/fields/:fieldId/columns/:columnId": {
+      "204_No_Content": null
+    },
+    "POST /admin/forms/:formId/fields/:fieldId/rows": {
+      "201_Created": {
+        "success": true,
+        "statusCode": 201,
+        "message": "Created",
+        "data": {
+          "rowId": 1,
+          "fieldId": 1,
+          "rowKey": "ROW_TOTAL",
+          "labelEn": "Total",
+          "labelAr": "الإجمالي",
+          "displayOrder": 1,
+          "isActive": true,
+          "createdAt": "2026-07-08T13:47:00.000Z",
+          "placeholderEn": null,
+          "placeholderAr": null,
+          "isRequired": false,
+          "isReadOnly": true,
+          "isVisible": true,
+          "defaultValue": null,
+          "helpTextEn": null,
+          "helpTextAr": null,
+          "validationMessageEn": null,
+          "validationMessageAr": null
+        },
+        "timestamp": "2026-07-08T13:47:00.000Z"
+      }
+    },
+    "DELETE /admin/forms/:formId/fields/:fieldId/rows/:rowId": {
+      "204_No_Content": null
+    },
+    "POST /admin/forms/:formId/fields/:fieldId/calculation": {
+      "200_OK": {
+        "success": true,
+        "statusCode": 200,
+        "message": "OK",
+        "data": {
+          "calculationId": 2,
+          "fieldId": 4,
+          "formulaExpression": "A * B",
+          "resultColumnKey": "TOTAL",
+          "resultLabelEn": "Total Amount",
+          "resultLabelAr": "المبلغ الإجمالي",
+          "resultPrecision": 2,
+          "buttonLabelEn": "Calculate",
+          "buttonLabelAr": "احسب",
+          "helpTextEn": "Quantity multiplied by unit price",
+          "helpTextAr": "الكمية مضروبة في سعر الوحدة",
+          "displayFormulaEn": "Total = Quantity × Unit Price",
+          "displayFormulaAr": "الإجمالي = الكمية × سعر الوحدة",
+          "isActive": true,
+          "createdAt": "2026-07-08T13:47:00.000Z",
+          "resultDataTypeId": 2,
+          "resultControlTypeId": 1,
+          "formFieldCalculationInputs": [
+            {
+              "inputId": 3,
+              "calculationId": 2,
+              "inputToken": "A",
+              "columnKey": "QUANTITY",
+              "labelEn": "Quantity",
+              "labelAr": "الكمية",
+              "placeholderEn": null,
+              "placeholderAr": null,
+              "displayOrder": 1,
+              "isRequired": true,
+              "isReadOnly": false,
+              "isVisible": true,
+              "validationMessageEn": null,
+              "validationMessageAr": null,
+              "isActive": true,
+              "createdAt": "2026-07-08T13:47:00.000Z",
+              "dataTypeId": 2,
+              "controlTypeId": 1
+            },
+            {
+              "inputId": 4,
+              "calculationId": 2,
+              "inputToken": "B",
+              "columnKey": "UNIT_PRICE",
+              "labelEn": "Unit Price",
+              "labelAr": "سعر الوحدة",
+              "placeholderEn": null,
+              "placeholderAr": null,
+              "displayOrder": 2,
+              "isRequired": true,
+              "isReadOnly": false,
+              "isVisible": true,
+              "validationMessageEn": null,
+              "validationMessageAr": null,
+              "isActive": true,
+              "createdAt": "2026-07-08T13:47:00.000Z",
+              "dataTypeId": 2,
+              "controlTypeId": 1
+            }
+          ]
+        },
+        "timestamp": "2026-07-08T13:47:00.000Z"
+      }
+    },
+    "DELETE /admin/forms/:formId/fields/:fieldId/calculation": {
+      "204_No_Content": null
+    },
+    "POST /admin/forms/:formId/fields/:fieldId/calculation/inputs": {
+      "201_Created": {
+        "success": true,
+        "statusCode": 201,
+        "message": "Created",
+        "data": {
+          "inputId": 5,
+          "calculationId": 2,
+          "inputToken": "C",
+          "columnKey": "TAX_RATE",
+          "labelEn": "Tax Rate",
+          "labelAr": "نسبة الضريبة",
+          "placeholderEn": null,
+          "placeholderAr": null,
+          "displayOrder": 3,
+          "isRequired": true,
+          "isReadOnly": false,
+          "isVisible": true,
+          "validationMessageEn": null,
+          "validationMessageAr": null,
+          "isActive": true,
+          "createdAt": "2026-07-08T13:47:00.000Z",
+          "dataTypeId": 2,
+          "controlTypeId": 1
+        },
+        "timestamp": "2026-07-08T13:47:00.000Z"
+      }
+    },
+    "DELETE /admin/forms/:formId/fields/:fieldId/calculation/inputs/:inputId": {
+      "204_No_Content": null
+    }
+  },
+
+  "Admin_Lookups": {
+    "GET /admin/lookups/control-types": {
+      "200_OK": {
+        "success": true,
+        "statusCode": 200,
+        "message": "OK",
+        "data": [
+          {
+            "controlTypeId": 1,
+            "controlKey": "TEXTBOX",
+            "controlName": "Text Box",
+            "description": "Single-line text input",
+            "isActive": true,
+            "createdAt": "2026-01-01T00:00:00.000Z"
+          },
+          {
+            "controlTypeId": 2,
+            "controlKey": "TEXTAREA",
+            "controlName": "Text Area",
+            "description": "Multi-line text input",
+            "isActive": true,
+            "createdAt": "2026-01-01T00:00:00.000Z"
+          },
+          {
+            "controlTypeId": 3,
+            "controlKey": "DROPDOWN",
+            "controlName": "Dropdown",
+            "description": "Single-select dropdown list",
+            "isActive": true,
+            "createdAt": "2026-01-01T00:00:00.000Z"
+          },
+          {
+            "controlTypeId": 4,
+            "controlKey": "RADIO",
+            "controlName": "Radio Buttons",
+            "description": "Single-select radio group",
+            "isActive": true,
+            "createdAt": "2026-01-01T00:00:00.000Z"
+          },
+          {
+            "controlTypeId": 5,
+            "controlKey": "MULTI_SELECT",
+            "controlName": "Multi-Select",
+            "description": "Multiple-select dropdown or checkbox list",
+            "isActive": true,
+            "createdAt": "2026-01-01T00:00:00.000Z"
+          },
+          {
+            "controlTypeId": 6,
+            "controlKey": "TABLE",
+            "controlName": "Table",
+            "description": "Grid/table with rows and columns",
+            "isActive": true,
+            "createdAt": "2026-01-01T00:00:00.000Z"
+          },
+          {
+            "controlTypeId": 7,
+            "controlKey": "CALCULATED",
+            "controlName": "Calculated",
+            "description": "Computed field using a formula",
+            "isActive": true,
+            "createdAt": "2026-01-01T00:00:00.000Z"
+          },
+          {
+            "controlTypeId": 8,
+            "controlKey": "DATE",
+            "controlName": "Date Picker",
+            "description": "Calendar date picker",
+            "isActive": true,
+            "createdAt": "2026-01-01T00:00:00.000Z"
+          },
+          {
+            "controlTypeId": 9,
+            "controlKey": "CHECKBOX",
+            "controlName": "Checkbox",
+            "description": "Boolean true/false checkbox",
+            "isActive": true,
+            "createdAt": "2026-01-01T00:00:00.000Z"
+          }
+        ],
+        "timestamp": "2026-07-08T13:47:00.000Z"
+      }
+    },
+    "GET /admin/lookups/data-types": {
+      "200_OK": {
+        "success": true,
+        "statusCode": 200,
+        "message": "OK",
+        "data": [
+          {
+            "dataTypeId": 1,
+            "typeKey": "TEXT",
+            "typeName": "Text",
+            "description": "String / text value",
+            "isActive": true,
+            "createdAt": "2026-01-01T00:00:00.000Z"
+          },
+          {
+            "dataTypeId": 2,
+            "typeKey": "NUMBER",
+            "typeName": "Number",
+            "description": "Numeric (integer or decimal) value",
+            "isActive": true,
+            "createdAt": "2026-01-01T00:00:00.000Z"
+          },
+          {
+            "dataTypeId": 3,
+            "typeKey": "DATE",
+            "typeName": "Date",
+            "description": "Date or date-time value",
+            "isActive": true,
+            "createdAt": "2026-01-01T00:00:00.000Z"
+          },
+          {
+            "dataTypeId": 4,
+            "typeKey": "BOOLEAN",
+            "typeName": "Boolean",
+            "description": "True/false value",
+            "isActive": true,
+            "createdAt": "2026-01-01T00:00:00.000Z"
+          }
+        ],
+        "timestamp": "2026-07-08T13:47:00.000Z"
+      }
+    },
+    "GET /admin/lookups/lookup-types": {
+      "200_OK": {
+        "success": true,
+        "statusCode": 200,
+        "message": "OK",
+        "data": [
+          {
+            "lookupTypeId": 1,
+            "code": "GENDER",
+            "nameEn": "Gender",
+            "nameAr": "الجنس",
+            "isActive": true
+          },
+          {
+            "lookupTypeId": 2,
+            "code": "NATIONALITY",
+            "nameEn": "Nationality",
+            "nameAr": "الجنسية",
+            "isActive": true
+          }
+        ],
+        "timestamp": "2026-07-08T13:47:00.000Z"
+      }
+    },
+    "GET /admin/lookups/lookup-types/:lookupTypeId/values": {
+      "200_OK": {
+        "success": true,
+        "statusCode": 200,
+        "message": "OK",
+        "data": [
+          {
+            "lookupValueId": 1,
+            "code": "MALE",
+            "nameEn": "Male",
+            "nameAr": "ذكر",
+            "isActive": true
+          },
+          {
+            "lookupValueId": 2,
+            "code": "FEMALE",
+            "nameEn": "Female",
+            "nameAr": "أنثى",
+            "isActive": true
+          }
+        ],
+        "timestamp": "2026-07-08T13:47:00.000Z"
+      }
+    },
+    "GET /admin/lookups/frequencies": {
+      "200_OK": {
+        "success": true,
+        "statusCode": 200,
+        "message": "OK",
+        "data": [
+          {
+            "frequencyId": 1,
+            "code": "MONTHLY",
+            "nameEn": "Monthly",
+            "nameAr": "شهري",
+            "description": null,
+            "isActive": true,
+            "createdAt": "2026-01-01T00:00:00.000Z"
+          },
+          {
+            "frequencyId": 2,
+            "code": "QUARTERLY",
+            "nameEn": "Quarterly",
+            "nameAr": "ربع سنوي",
+            "description": null,
+            "isActive": true,
+            "createdAt": "2026-01-01T00:00:00.000Z"
+          },
+          {
+            "frequencyId": 3,
+            "code": "ANNUALLY",
+            "nameEn": "Annually",
+            "nameAr": "سنويًا",
+            "description": null,
+            "isActive": true,
+            "createdAt": "2026-01-01T00:00:00.000Z"
+          },
+          {
+            "frequencyId": 4,
+            "code": "WEEKLY",
+            "nameEn": "Weekly",
+            "nameAr": "أسبوعي",
+            "description": null,
+            "isActive": true,
+            "createdAt": "2026-01-01T00:00:00.000Z"
+          },
+          {
+            "frequencyId": 5,
+            "code": "DAILY",
+            "nameEn": "Daily",
+            "nameAr": "يومي",
+            "description": null,
+            "isActive": true,
+            "createdAt": "2026-01-01T00:00:00.000Z"
+          }
+        ],
+        "timestamp": "2026-07-08T13:47:00.000Z"
+      }
+    }
+  },
+
+  "Common_Error_Responses": {
+    "400_Bad_Request (validation)": {
+      "success": false,
+      "statusCode": 400,
+      "message": ["nameEn should not be empty", "formKey must be a string"],
+      "error": "BAD_REQUEST",
+      "path": "/admin/forms",
+      "timestamp": "2026-07-08T13:47:00.000Z"
+    },
+    "401_Unauthorized": {
+      "success": false,
+      "statusCode": 401,
+      "message": "Unauthorized",
+      "error": "UNAUTHORIZED",
+      "path": "/admin/users",
+      "timestamp": "2026-07-08T13:47:00.000Z"
+    },
+    "403_Forbidden (wrong role)": {
+      "success": false,
+      "statusCode": 403,
+      "message": "Forbidden resource",
+      "error": "FORBIDDEN",
+      "path": "/admin/users",
+      "timestamp": "2026-07-08T13:47:00.000Z"
+    },
+    "404_Not_Found": {
+      "success": false,
+      "statusCode": 404,
+      "message": "Form with id 999 not found",
+      "error": "NOT_FOUND",
+      "path": "/admin/forms/999",
+      "timestamp": "2026-07-08T13:47:00.000Z"
+    },
+    "409_Conflict": {
+      "success": false,
+      "statusCode": 409,
+      "message": "A form with formKey \"PERMIT_REQUEST\" already exists",
+      "error": "CONFLICT",
+      "path": "/admin/forms",
+      "timestamp": "2026-07-08T13:47:00.000Z"
+    },
+    "500_Internal_Server_Error": {
+      "success": false,
+      "statusCode": 500,
+      "message": "Internal server error",
+      "error": "InternalServerError",
+      "path": "/admin/forms",
+      "timestamp": "2026-07-08T13:47:00.000Z"
+    }
+  }
+}

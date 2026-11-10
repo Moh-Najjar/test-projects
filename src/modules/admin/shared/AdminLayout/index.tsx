@@ -23,6 +23,7 @@ import {
   AccountTreeRounded as DirectoratesIcon,
   GroupsRounded as GroupsIcon,
   DynamicFormRounded as FormsIcon,
+  HistoryRounded as AuditIcon,
   SpaceDashboardRounded as DashboardIcon,
   LogoutRounded as LogoutIcon,
   MenuRounded as MenuIcon,
@@ -76,6 +77,7 @@ const NAV_GROUPS: NavGroup[] = [
       { labelKey: 'admin.nav.directorates', path: '/admin/directorates', icon: <DirectoratesIcon /> },
       { labelKey: 'admin.nav.groupMappings', path: '/admin/group-mappings', icon: <GroupsIcon /> },
       { labelKey: 'admin.nav.forms', path: '/admin/forms', icon: <FormsIcon /> },
+      { labelKey: 'admin.nav.auditLogs', path: '/admin/audit-logs', icon: <AuditIcon /> },
     ],
   },
   {

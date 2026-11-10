@@ -16,4 +16,5 @@ export interface LoginResponse {
   kpiFormNameAr: string;
   roles: string[];
   preferredLanguage: string;
+  lastLoginAt: string | null;
 }

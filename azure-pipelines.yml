@@ -1,0 +1,322 @@
+
+trigger:
+  branches:
+    include:
+      - main
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  nodeVersion: '22.x'
+  azureServiceConnection: 'ASEZA-AZURE-SC'
+  appServiceName: 'asezaportalform'
+  resourceGroupName: 'Services-ResourceGroups'
+
+stages:
+
+# ============================================
+# STAGE 1 - BUILD STAGING AND PRODUCTION
+# ============================================
+- stage: Build
+  displayName: 'Build and Test React'
+
+  jobs:
+
+  # ------------------------------------------
+  # BUILD STAGING
+  # ------------------------------------------
+  - job: BuildSTG
+    displayName: 'Build React STG'
+
+    variables:
+    - group: aseza-web-stg-vars
+
+    steps:
+    - checkout: self
+
+    - task: NodeTool@0
+      displayName: 'Install Node.js 22'
+      inputs:
+        versionSpec: '$(nodeVersion)'
+
+    - pwsh: |
+        node --version
+        npm --version
+
+        npm ci
+
+        if ($LASTEXITCODE -ne 0) {
+          throw "STG npm install failed"
+        }
+      displayName: 'Install STG dependencies'
+
+    - pwsh: |
+        $required = @(
+          "VITE_API_BASE_URL",
+          "VITE_ADMIN_API_BASE_URL",
+          "VITE_CLIENT_ID",
+          "VITE_TENANT_ID",
+          "VITE_REDIRECT_URI"
+        )
+
+        foreach ($name in $required) {
+          $value = [Environment]::GetEnvironmentVariable($name)
+
+          if ([string]::IsNullOrWhiteSpace($value) -or
+              $value -match '^\$\(') {
+            throw "Missing STG variable: $name"
+          }
+        }
+
+        Write-Host "STG environment variables verified"
+
+        npm run build:staging
+
+        if ($LASTEXITCODE -ne 0) {
+          throw "STG React build failed"
+        }
+
+        if (!(Test-Path "dist/index.html")) {
+          throw "Missing dist/index.html"
+        }
+
+        if (!(Test-Path "dist/web.config")) {
+          throw "Missing dist/web.config"
+        }
+
+        Write-Host "STG React build completed successfully"
+      displayName: 'Build React for STG'
+      env:
+        VITE_API_BASE_URL: $(VITE_API_BASE_URL)
+        VITE_ADMIN_API_BASE_URL: $(VITE_ADMIN_API_BASE_URL)
+        VITE_CLIENT_ID: $(VITE_CLIENT_ID)
+        VITE_TENANT_ID: $(VITE_TENANT_ID)
+        VITE_REDIRECT_URI: $(VITE_REDIRECT_URI)
+
+    - task: ArchiveFiles@2
+      displayName: 'Create STG ZIP'
+      inputs:
+        rootFolderOrFile: '$(Build.SourcesDirectory)/dist'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/web-stg.zip'
+        replaceExistingArchive: true
+
+    - publish: '$(Build.ArtifactStagingDirectory)/web-stg.zip'
+      artifact: 'web-stg'
+      displayName: 'Publish STG artifact'
+
+  # ------------------------------------------
+  # BUILD PRODUCTION
+  # ------------------------------------------
+  - job: BuildPROD
+    displayName: 'Build React PROD'
+
+    variables:
+    - group: aseza-web-prod-vars
+
+    steps:
+    - checkout: self
+
+    - task: NodeTool@0
+      displayName: 'Install Node.js 22'
+      inputs:
+        versionSpec: '$(nodeVersion)'
+
+    - pwsh: |
+        node --version
+        npm --version
+
+        npm ci
+
+        if ($LASTEXITCODE -ne 0) {
+          throw "PROD npm install failed"
+        }
+      displayName: 'Install PROD dependencies'
+
+    - pwsh: |
+        $required = @(
+          "VITE_API_BASE_URL",
+          "VITE_ADMIN_API_BASE_URL",
+          "VITE_CLIENT_ID",
+          "VITE_TENANT_ID",
+          "VITE_REDIRECT_URI"
+        )
+
+        foreach ($name in $required) {
+          $value = [Environment]::GetEnvironmentVariable($name)
+
+          if ([string]::IsNullOrWhiteSpace($value) -or
+              $value -match '^\$\(') {
+            throw "Missing PROD variable: $name"
+          }
+        }
+
+        Write-Host "PROD environment variables verified"
+
+        npm run build
+
+        if ($LASTEXITCODE -ne 0) {
+          throw "PROD React build failed"
+        }
+
+        if (!(Test-Path "dist/index.html")) {
+          throw "Missing dist/index.html"
+        }
+
+        if (!(Test-Path "dist/web.config")) {
+          throw "Missing dist/web.config"
+        }
+
+        Write-Host "PROD React build completed successfully"
+      displayName: 'Build React for PROD'
+      env:
+        VITE_API_BASE_URL: $(VITE_API_BASE_URL)
+        VITE_ADMIN_API_BASE_URL: $(VITE_ADMIN_API_BASE_URL)
+        VITE_CLIENT_ID: $(VITE_CLIENT_ID)
+        VITE_TENANT_ID: $(VITE_TENANT_ID)
+        VITE_REDIRECT_URI: $(VITE_REDIRECT_URI)
+
+    - task: ArchiveFiles@2
+      displayName: 'Create PROD ZIP'
+      inputs:
+        rootFolderOrFile: '$(Build.SourcesDirectory)/dist'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/web-prod.zip'
+        replaceExistingArchive: true
+
+    - publish: '$(Build.ArtifactStagingDirectory)/web-prod.zip'
+      artifact: 'web-prod'
+      displayName: 'Publish PROD artifact'
+
+# ============================================
+# STAGE 2 - DEPLOY REACT TO STAGING
+# ============================================
+- stage: STG
+  displayName: 'Deploy React to STG'
+  dependsOn: Build
+  condition: succeeded()
+
+  jobs:
+  - deployment: DeploySTG
+    displayName: 'Deploy React to Staging'
+    environment: 'aseza-web-stg'
+
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: current
+            artifact: 'web-stg'
+
+          - task: AzureWebApp@1
+            displayName: 'Deploy React ZIP to STG'
+            inputs:
+              azureSubscription: '$(azureServiceConnection)'
+              appType: 'webApp'
+              appName: '$(appServiceName)'
+              deployToSlotOrASE: true
+              resourceGroupName: '$(resourceGroupName)'
+              slotName: 'stg'
+              package: '$(Pipeline.Workspace)/web-stg/web-stg.zip'
+              deploymentMethod: 'zipDeploy'
+
+          - pwsh: |
+              $url = "https://asezaportalform-stg.azurewebsites.net/"
+              $success = $false
+
+              for ($i = 1; $i -le 12; $i++) {
+                try {
+                  Write-Host "STG verification attempt $i"
+
+                  $response = Invoke-WebRequest `
+                    -Uri $url `
+                    -UseBasicParsing `
+                    -TimeoutSec 30
+
+                  if ($response.StatusCode -eq 200 -and
+                      $response.Content -match '<html') {
+                    Write-Host "React STG is responding"
+                    $success = $true
+                    break
+                  }
+                }
+                catch {
+                  Write-Host "STG check failed: $($_.Exception.Message)"
+                }
+
+                if ($i -lt 12) {
+                  Start-Sleep -Seconds 10
+                }
+              }
+
+              if (-not $success) {
+                throw "STG verification failed after 12 attempts"
+              }
+            displayName: 'Verify React STG'
+
+# ============================================
+# STAGE 3 - DEPLOY REACT TO PRODUCTION
+# Requires approval from aseza-web-prod
+# ============================================
+- stage: PROD
+  displayName: 'Deploy React to PROD'
+  dependsOn: STG
+  condition: succeeded()
+
+  jobs:
+  - deployment: DeployPROD
+    displayName: 'Deploy React to Production'
+    environment: 'aseza-web-prod'
+
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: current
+            artifact: 'web-prod'
+
+          - task: AzureWebApp@1
+            displayName: 'Deploy React ZIP to PROD'
+            inputs:
+              azureSubscription: '$(azureServiceConnection)'
+              appType: 'webApp'
+              appName: '$(appServiceName)'
+              package: '$(Pipeline.Workspace)/web-prod/web-prod.zip'
+              deploymentMethod: 'zipDeploy'
+
+          - pwsh: |
+              $url = "https://asezaportalform.azurewebsites.net/"
+              $success = $false
+
+              for ($i = 1; $i -le 12; $i++) {
+                try {
+                  Write-Host "PROD verification attempt $i"
+
+                  $response = Invoke-WebRequest `
+                    -Uri $url `
+                    -UseBasicParsing `
+                    -TimeoutSec 30
+
+                  if ($response.StatusCode -eq 200 -and
+                      $response.Content -match '<html') {
+                    Write-Host "React PROD is responding"
+                    $success = $true
+                    break
+                  }
+                }
+                catch {
+                  Write-Host "PROD check failed: $($_.Exception.Message)"
+                }
+
+                if ($i -lt 12) {
+                  Start-Sleep -Seconds 10
+                }
+              }
+
+              if (-not $success) {
+                throw "PROD verification failed after 12 attempts"
+              }
+            displayName: 'Verify React PROD'

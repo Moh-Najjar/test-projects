@@ -1,0 +1,366 @@
+File Tree: ASEZA
+Generated on: 9/8/2026, 3:50:22 PM
+Root path: d:\Projects\React js\ASEZA
+
+────────────────────────────────────────────────────────────────────────────────
+
+├── public/
+│   ├── Logo.svg
+│   ├── aseza-logo-en.png
+│   ├── logo-en.png
+│   ├── vite.svg
+│   └── web.config
+├── scripts/
+│   ├── ASEZA_Weekly_Progress_Report_Week_Jun2-9_2026.docx
+│   ├── ASEZA_Weekly_Progress_Report_Week_Jun9-14_2026.docx
+│   └── generate-weekly-progress-report.mjs
+├── src/
+│   ├── assets/
+│   │   ├── fonts/
+│   │   │   ├── Cairo/
+│   │   │   │   ├── static/
+│   │   │   │   │   ├── Cairo-Black.ttf
+│   │   │   │   │   ├── Cairo-Bold.ttf
+│   │   │   │   │   ├── Cairo-ExtraBold.ttf
+│   │   │   │   │   ├── Cairo-ExtraLight.ttf
+│   │   │   │   │   ├── Cairo-Light.ttf
+│   │   │   │   │   ├── Cairo-Medium.ttf
+│   │   │   │   │   ├── Cairo-Regular.ttf
+│   │   │   │   │   └── Cairo-SemiBold.ttf
+│   │   │   │   ├── Cairo-VariableFont_slnt,wght.ttf
+│   │   │   │   ├── OFL.txt
+│   │   │   │   └── README.txt
+│   │   │   ├── Dubai-Bold.ttf
+│   │   │   ├── Dubai-Medium.ttf
+│   │   │   ├── Dubai-Regular.ttf
+│   │   │   ├── LamaSans-BlackCondensed.otf
+│   │   │   ├── LamaSans-Bold.otf
+│   │   │   ├── LamaSans-SemiBold.otf
+│   │   │   ├── LyonArabicDisplay-Medium.otf
+│   │   │   ├── LyonArabicDisplay-Regular.otf
+│   │   │   ├── LyonArabicText-Bold.otf
+│   │   │   ├── LyonArabicText-Regular.otf
+│   │   │   ├── LyonArabicText-RegularNo2.otf
+│   │   │   ├── LyonArabicText-SemiBold.otf
+│   │   │   ├── PlayfairDisplay-Bold.ttf
+│   │   │   ├── PlayfairDisplay-Medium.ttf
+│   │   │   ├── PlayfairDisplay-Regular.ttf
+│   │   │   ├── PlayfairDisplay-SemiBold.ttf
+│   │   │   ├── PragatiNarrow-Bold.ttf
+│   │   │   └── PragatiNarrow-Regular.ttf
+│   │   ├── icons/
+│   │   │   └── icon-calculator.svg
+│   │   ├── images/
+│   │   │   ├── about/
+│   │   │   │   ├── about.jpeg
+│   │   │   │   ├── achievements-1.jpg
+│   │   │   │   ├── ceo.jpg
+│   │   │   │   └── cm.jpeg
+│   │   │   ├── home/
+│   │   │   │   ├── boy.png
+│   │   │   │   ├── carousel-4-1.png
+│   │   │   │   ├── carousel-4-2.png
+│   │   │   │   ├── carousel-5-1.png
+│   │   │   │   ├── carousel-5-2.png
+│   │   │   │   ├── carousel-5-3.png
+│   │   │   │   ├── carousel-5-4.png
+│   │   │   │   ├── img1.png
+│   │   │   │   ├── img2.png
+│   │   │   │   └── img3.png
+│   │   │   ├── applepay.png
+│   │   │   ├── card.png
+│   │   │   ├── iconcamel.png
+│   │   │   ├── icondate.png
+│   │   │   ├── icongold.png
+│   │   │   ├── iconmoney.png
+│   │   │   ├── iconplant.png
+│   │   │   ├── iconsilver.png
+│   │   │   ├── phoneIcon.png
+│   │   │   ├── phoneNumber.png
+│   │   │   ├── star.png
+│   │   │   └── visa.png
+│   │   ├── Logo.svg
+│   │   ├── aseza-icon.svg
+│   │   ├── aseza-logo-ar.png
+│   │   ├── aseza-logo-en.png
+│   │   ├── logo-ar.png
+│   │   ├── logo-en.png
+│   │   └── react.svg
+│   ├── core/
+│   │   ├── api/
+│   │   │   ├── admin/
+│   │   │   │   ├── adminAuth.ts
+│   │   │   │   ├── adminDirectorates.ts
+│   │   │   │   ├── adminForms.ts
+│   │   │   │   ├── adminHttp.ts
+│   │   │   │   ├── adminLookups.ts
+│   │   │   │   └── adminUsers.ts
+│   │   │   ├── auth.ts
+│   │   │   ├── form.ts
+│   │   │   ├── graph.ts
+│   │   │   └── request.ts
+│   │   ├── auth/
+│   │   ├── config/
+│   │   │   └── authConfig.ts
+│   │   ├── constants/
+│   │   │   └── theme.ts
+│   │   ├── context/
+│   │   │   ├── AdminAuthContext.tsx
+│   │   │   ├── AppProviders.tsx
+│   │   │   ├── AuthContext.tsx
+│   │   │   ├── DirectionContext.tsx
+│   │   │   ├── ErrorBoundary.tsx
+│   │   │   ├── FetchingContext.tsx
+│   │   │   ├── ThemeContext.tsx
+│   │   │   └── TourContext.tsx
+│   │   ├── enums/
+│   │   │   └── control-keys.enum.ts
+│   │   ├── helpers/
+│   │   │   ├── apiHelper.ts
+│   │   │   ├── buildMultipleAssetsPayload.ts
+│   │   │   ├── computeClampVwPx.ts
+│   │   │   ├── getBaseFontFamily.ts
+│   │   │   └── http.ts
+│   │   ├── hooks/
+│   │   │   ├── admin/
+│   │   │   │   ├── useAdminDirectorates.ts
+│   │   │   │   ├── useAdminForms.ts
+│   │   │   │   ├── useAdminLookups.ts
+│   │   │   │   └── useAdminUsers.ts
+│   │   │   ├── useAuthentication.ts
+│   │   │   ├── useDeviceType.ts
+│   │   │   ├── useFormApi.ts
+│   │   │   ├── useGraph.ts
+│   │   │   ├── useLocale.ts
+│   │   │   ├── useRequestApi.ts
+│   │   │   ├── useStepper.ts
+│   │   │   └── useTokenSession.ts
+│   │   ├── mockup/
+│   │   │   ├── formData-v1.json
+│   │   │   ├── formData-v2.json
+│   │   │   ├── formData.json
+│   │   │   └── getServiceAttributeList.json
+│   │   ├── routes/
+│   │   │   ├── adminRoutes/
+│   │   │   │   ├── adminAuthRoutes.tsx
+│   │   │   │   ├── adminProtectedRoutes.tsx
+│   │   │   │   └── index.tsx
+│   │   │   ├── protectedRoutes/
+│   │   │   │   ├── homeRoutes.tsx
+│   │   │   │   ├── index.tsx
+│   │   │   │   ├── myRequestRoutes.tsx
+│   │   │   │   ├── newRequestRoutes.tsx
+│   │   │   │   ├── notFoundRoutes.tsx
+│   │   │   │   ├── profileRoutes.tsx
+│   │   │   │   └── userGuideRoutes.tsx
+│   │   │   ├── publicRoutes/
+│   │   │   │   ├── authRoutes.tsx
+│   │   │   │   ├── index.tsx
+│   │   │   │   └── notFoundRoutes.tsx
+│   │   │   ├── authorizedLayout.tsx
+│   │   │   ├── index.tsx
+│   │   │   ├── publicLayout.tsx
+│   │   │   └── routeConfig.tsx
+│   │   ├── types/
+│   │   │   ├── admin/
+│   │   │   │   ├── adminAuth.ts
+│   │   │   │   ├── adminDirectorates.ts
+│   │   │   │   ├── adminForms.ts
+│   │   │   │   ├── adminLookups.ts
+│   │   │   │   └── adminUsers.ts
+│   │   │   ├── FormField.ts
+│   │   │   ├── approveResponse.ts
+│   │   │   ├── attributeDtoList.ts
+│   │   │   ├── countryItem.ts
+│   │   │   ├── getDropdownListValuesRequest.ts
+│   │   │   ├── getDropdownListValuesResponse.ts
+│   │   │   ├── getMySubmissionsRequest.ts
+│   │   │   ├── getMySubmissionsResponse.ts
+│   │   │   ├── getSubmissionDetailsRequest.ts
+│   │   │   ├── getSubmissionDetailsResponse.ts
+│   │   │   ├── index.ts
+│   │   │   ├── loginRequest.ts
+│   │   │   ├── loginResponse.ts
+│   │   │   ├── refreshTokenRequest.ts
+│   │   │   ├── refreshTokenResponse.ts
+│   │   │   ├── rejectRequest.ts
+│   │   │   ├── rejectResponse.ts
+│   │   │   ├── response.ts
+│   │   │   ├── roles.ts
+│   │   │   ├── serviceAssetsRequest.ts
+│   │   │   ├── serviceAssetsResponse.ts
+│   │   │   ├── submitFormRequest.ts
+│   │   │   └── submitFormResponse.ts
+│   │   └── utils/
+│   │       ├── control.utils.ts
+│   │       ├── convertDateFormat.ts
+│   │       ├── countryLookup.ts
+│   │       ├── formDataMapper.ts
+│   │       ├── frequencyPeriods.ts
+│   │       ├── groupAttributesByGroup.ts
+│   │       ├── groupAttributesByPage.ts
+│   │       ├── index.ts
+│   │       ├── jwtUtils.ts
+│   │       ├── tableDropdownUniqueness.ts
+│   │       ├── updateAttributeLocally.ts
+│   │       ├── validateAllFormFields.ts
+│   │       └── validationUtils.ts
+│   ├── i18n/
+│   │   ├── locales/
+│   │   │   ├── ar.json
+│   │   │   └── en.json
+│   │   ├── index.ts
+│   │   └── languages.ts
+│   ├── modules/
+│   │   ├── __test__/
+│   │   │   ├── Iframe.test.tsx
+│   │   │   └── index.tsx
+│   │   ├── admin/
+│   │   │   ├── components/
+│   │   │   │   ├── DirectorateManagement/
+│   │   │   │   │   └── index.tsx
+│   │   │   │   ├── FormManagement/
+│   │   │   │   │   ├── CalculationConfigFields.tsx
+│   │   │   │   │   ├── EditFieldDialog.tsx
+│   │   │   │   │   ├── FormDetail.tsx
+│   │   │   │   │   ├── ManageFieldFrequencyDialog.tsx
+│   │   │   │   │   ├── ManageTableStructureDialog.tsx
+│   │   │   │   │   ├── RegexPatternSelect.tsx
+│   │   │   │   │   ├── calculationConfig.utils.ts
+│   │   │   │   │   ├── controlFieldRequirements.ts
+│   │   │   │   │   ├── index.tsx
+│   │   │   │   │   └── regexPatterns.ts
+│   │   │   │   └── UserManagement/
+│   │   │   │       └── index.tsx
+│   │   │   ├── dashboard/
+│   │   │   │   └── index.tsx
+│   │   │   ├── documentation/
+│   │   │   ├── login/
+│   │   │   │   └── index.tsx
+│   │   │   └── shared/
+│   │   │       └── AdminLayout/
+│   │   │           └── index.tsx
+│   │   ├── auth/
+│   │   │   └── Login/
+│   │   │       └── index.tsx
+│   │   ├── controls/
+│   │   │   ├── InputFieldLabel/
+│   │   │   │   └── index.tsx
+│   │   │   ├── CalculatedField.tsx
+│   │   │   ├── Date.tsx
+│   │   │   ├── DropDown.tsx
+│   │   │   ├── InputField.tsx
+│   │   │   ├── Label.tsx
+│   │   │   ├── MultiSelect-v1.tsx
+│   │   │   ├── MultiSelect-v2.tsx
+│   │   │   ├── MultiSelect.tsx
+│   │   │   ├── PercentageField.tsx
+│   │   │   ├── RawTable.tsx
+│   │   │   └── TableGrid.tsx
+│   │   ├── home/
+│   │   │   └── index.tsx
+│   │   ├── my-requests/
+│   │   │   ├── components/
+│   │   │   │   ├── RequestDetailStepper/
+│   │   │   │   │   ├── ApproveConfirmDialog.tsx
+│   │   │   │   │   ├── RejectConfirmDialog.tsx
+│   │   │   │   │   ├── ViewActions.tsx
+│   │   │   │   │   ├── ViewContent.tsx
+│   │   │   │   │   └── index.tsx
+│   │   │   │   ├── AddRequestDialog.tsx
+│   │   │   │   └── RequestDetailDrawer.tsx
+│   │   │   ├── utils/
+│   │   │   │   ├── exportToDocx.ts
+│   │   │   │   ├── fieldValueToFormField.ts
+│   │   │   │   └── statusHelpers.ts
+│   │   │   ├── RequestDetail.tsx
+│   │   │   ├── index.tsx
+│   │   │   └── types.ts
+│   │   ├── new-request/
+│   │   │   ├── Stepper/
+│   │   │   │   ├── Actions.tsx
+│   │   │   │   ├── AttributeGrouping.tsx
+│   │   │   │   ├── Content.tsx
+│   │   │   │   ├── Header.tsx
+│   │   │   │   ├── ReviewContent.tsx
+│   │   │   │   ├── Stepper.module.css
+│   │   │   │   └── index.tsx
+│   │   │   └── index.tsx
+│   │   ├── profile/
+│   │   │   └── index.tsx
+│   │   ├── shared/
+│   │   │   ├── AppTour/
+│   │   │   │   ├── index.tsx
+│   │   │   │   └── tourSteps.ts
+│   │   │   ├── Breadcrumbs/
+│   │   │   │   └── index.tsx
+│   │   │   ├── BrokenComponent/
+│   │   │   │   └── index.tsx
+│   │   │   ├── ConfirmationDialog/
+│   │   │   │   └── index.tsx
+│   │   │   ├── Container/
+│   │   │   │   └── index.tsx
+│   │   │   ├── Footer/
+│   │   │   │   ├── footerLinks.ts
+│   │   │   │   └── index.tsx
+│   │   │   ├── HeroBanner/
+│   │   │   │   └── index.tsx
+│   │   │   ├── ImageCardGrid/
+│   │   │   │   └── index.tsx
+│   │   │   ├── LanguageSwitcher/
+│   │   │   │   └── index.tsx
+│   │   │   ├── Navbar/
+│   │   │   │   ├── MobileNavDrawer.tsx
+│   │   │   │   ├── UserProfile.tsx
+│   │   │   │   ├── index.tsx
+│   │   │   │   ├── navLinks.ts
+│   │   │   │   └── useNavItems.ts
+│   │   │   ├── NoData/
+│   │   │   │   └── index.tsx
+│   │   │   ├── NotFound/
+│   │   │   │   └── index.tsx
+│   │   │   ├── PageTransition/
+│   │   │   │   └── index.tsx
+│   │   │   ├── PresetAmountStrip/
+│   │   │   │   └── index.tsx
+│   │   │   ├── SubmissionSuccessDialog/
+│   │   │   │   └── index.tsx
+│   │   │   ├── SuspenseWrapper/
+│   │   │   │   └── index.tsx
+│   │   │   ├── ThemeToggle/
+│   │   │   │   └── index.tsx
+│   │   │   ├── TitleHeader/
+│   │   │   │   └── index.tsx
+│   │   │   ├── Toast/
+│   │   │   │   ├── ToastPending-v2.tsx
+│   │   │   │   └── ToastPending.tsx
+│   │   │   └── TopBanner/
+│   │   │       └── index.tsx
+│   │   └── user-guide/
+│   │       └── index.tsx
+│   ├── store/
+│   │   ├── slices/
+│   │   │   ├── cartSlice.ts
+│   │   │   ├── fetchingSlice.ts
+│   │   │   ├── mosquesSlice.ts
+│   │   │   └── rootReducer.ts
+│   │   └── store.ts
+│   ├── App.css
+│   ├── App.tsx
+│   ├── index.css
+│   └── main.tsx
+├── .gitignore
+├── README.md
+├── api-response.json
+├── aseza-admin-portal.postman_collection.json
+├── eslint.config.js
+├── index.html
+├── package-lock.json
+├── package.json
+├── tsconfig.app.json
+├── tsconfig.json
+├── tsconfig.node.json
+└── vite.config.ts
+
+────────────────────────────────────────────────────────────────────────────────
+Generated by FileTree Pro Extension

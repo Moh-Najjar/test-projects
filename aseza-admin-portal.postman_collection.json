@@ -1,0 +1,786 @@
+{
+  "info": {
+    "name": "Aseza Admin Portal",
+    "description": "Complete API collection for the Aseza Admin Portal — NestJS backend running on http://localhost:3000",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string",
+      "description": "JWT access token — filled automatically by the Login request's Tests script."
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res && res.data && res.data.accessToken) {",
+                  "  pm.collectionVariables.set('token', res.data.accessToken);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"secret123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            },
+            "description": "POST /auth/login — validates admin credentials and returns a signed JWT. The Tests script saves the token into the collection variable `token` automatically."
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/logout",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "logout"]
+            },
+            "description": "POST /auth/logout — blacklists the current Bearer token in Redis (no response body, 204)."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin / Users",
+      "item": [
+        {
+          "name": "List Users",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/users?page=1&pageSize=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "users"],
+              "query": [
+                { "key": "page", "value": "1", "description": "1-based page number" },
+                { "key": "pageSize", "value": "20", "description": "Results per page" },
+                { "key": "search", "value": "", "description": "Free-text filter on username/email", "disabled": true },
+                { "key": "isActive", "value": "true", "description": "Filter by active status (true/false)", "disabled": true }
+              ]
+            },
+            "description": "GET /admin/users — paginated list of users with optional search and isActive filter."
+          }
+        },
+        {
+          "name": "Get User Roles",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/users/1/roles",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "users", "1", "roles"]
+            },
+            "description": "GET /admin/users/:userId/roles — lists all role assignments for a specific user."
+          }
+        },
+        {
+          "name": "Assign Role to User",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"roleId\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/users/1/roles",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "users", "1", "roles"]
+            },
+            "description": "POST /admin/users/:userId/roles — assigns a role to a user (idempotent)."
+          }
+        },
+        {
+          "name": "Remove Role from User",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/users/1/roles/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "users", "1", "roles", "1"]
+            },
+            "description": "DELETE /admin/users/:userId/roles/:roleId — removes a role assignment from a user (204)."
+          }
+        },
+        {
+          "name": "Assign Directorate to User",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"directorateId\": 3\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/users/1/directorate",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "users", "1", "directorate"]
+            },
+            "description": "PUT /admin/users/:userId/directorate — assigns or unassigns a directorate. Send { \"directorateId\": null } to unassign."
+          }
+        },
+        {
+          "name": "Get All Roles",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/roles",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "roles"]
+            },
+            "description": "GET /admin/roles — returns all available roles for dropdown population."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin / Directorates",
+      "item": [
+        {
+          "name": "Get All Directorates",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/directorates",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "directorates"]
+            },
+            "description": "GET /admin/directorates — returns all directorates with their parent info."
+          }
+        },
+        {
+          "name": "Create Directorate",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"directorateKey\": \"DIRECTORATE_001\",\n  \"nameEn\": \"Information Technology Directorate\",\n  \"nameAr\": \"مديرية تكنولوجيا المعلومات\",\n  \"isActive\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/directorates",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "directorates"]
+            },
+            "description": "POST /admin/directorates — creates a new directorate."
+          }
+        },
+        {
+          "name": "Get Directorate Forms",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/directorates/1/forms",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "directorates", "1", "forms"]
+            },
+            "description": "GET /admin/directorates/:id/forms — lists all form access records assigned to a specific directorate."
+          }
+        },
+        {
+          "name": "Assign Form to Directorate",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"formId\": 1,\n  \"canView\": true,\n  \"canSubmit\": true,\n  \"canApprove\": false\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/directorates/1/forms",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "directorates", "1", "forms"]
+            },
+            "description": "POST /admin/directorates/:id/forms — assigns a form to a directorate with permissions (upsert if already assigned)."
+          }
+        },
+        {
+          "name": "Remove Form from Directorate",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/directorates/1/forms/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "directorates", "1", "forms", "1"]
+            },
+            "description": "DELETE /admin/directorates/:id/forms/:formId — removes a form access record from a directorate (204)."
+          }
+        },
+        {
+          "name": "Get Active Forms (Dropdown)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/forms",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "forms"]
+            },
+            "description": "GET /admin/forms — returns all active forms for form dropdowns in the admin UI."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin / External Group Role Mappings",
+      "item": [
+        {
+          "name": "Get All External Group Role Mappings",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/external-group-role-mappings",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "external-group-role-mappings"]
+            },
+            "description": "GET /admin/external-group-role-mappings — returns all Azure AD group to portal role mappings."
+          }
+        },
+        {
+          "name": "Create External Group Role Mapping",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"groupObjectId\": \"azure-group-object-id\",\n  \"groupKey\": \"IT_ADMIN_GROUP\",\n  \"groupNameEn\": \"IT Administrators\",\n  \"groupNameAr\": \"مسؤولو تكنولوجيا المعلومات\",\n  \"roleId\": 1,\n  \"isActive\": true,\n  \"directorateId\": 2\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/external-group-role-mappings",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "external-group-role-mappings"]
+            },
+            "description": "POST /admin/external-group-role-mappings — maps an Azure AD group to a portal role and directorate."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin / Forms",
+      "item": [
+        {
+          "name": "Get All Forms (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/forms/all",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "forms", "all"]
+            },
+            "description": "GET /admin/forms/all — returns all forms including inactive ones."
+          }
+        },
+        {
+          "name": "Get Form by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/forms/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "forms", "1"]
+            },
+            "description": "GET /admin/forms/:formId — returns a single form with all its fields and each field's sub-relations."
+          }
+        },
+        {
+          "name": "Create Form",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"formKey\": \"PERMIT_REQUEST\",\n  \"nameEn\": \"Permit Request\",\n  \"nameAr\": \"طلب تصريح\",\n  \"descriptionEn\": \"Form for submitting a new permit request\",\n  \"descriptionAr\": \"نموذج لتقديم طلب تصريح جديد\",\n  \"directorateId\": 1,\n  \"frequencyId\": 1,\n  \"effectiveFrom\": \"2026-01-01\",\n  \"effectiveTo\": \"2026-12-31\",\n  \"isActive\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/forms",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "forms"]
+            },
+            "description": "POST /admin/forms — creates a new blank form."
+          }
+        },
+        {
+          "name": "Update Form",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nameEn\": \"Updated Permit Request\",\n  \"isActive\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/forms/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "forms", "1"]
+            },
+            "description": "PATCH /admin/forms/:formId — partially updates form metadata (all fields optional)."
+          }
+        },
+        {
+          "name": "Deactivate Form",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/forms/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "forms", "1"]
+            },
+            "description": "DELETE /admin/forms/:formId — soft-deletes the form (sets IsActive = false)."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin / Fields",
+      "item": [
+        {
+          "name": "Get Fields",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/forms/1/fields",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "forms", "1", "fields"]
+            },
+            "description": "GET /admin/forms/:formId/fields — returns all fields for the form with every sub-relation."
+          }
+        },
+        {
+          "name": "Add Field",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fieldKey\": \"APPLICANT_NAME\",\n  \"labelEn\": \"Applicant Name\",\n  \"labelAr\": \"اسم مقدم الطلب\",\n  \"dataTypeId\": 1,\n  \"controlTypeId\": 1,\n  \"displayOrder\": 1,\n  \"isRequired\": true,\n  \"maxLength\": 200,\n  \"placeholderEn\": \"Enter full name\",\n  \"placeholderAr\": \"أدخل الاسم الكامل\",\n  \"helpTextEn\": \"Enter your full legal name\",\n  \"helpTextAr\": \"أدخل اسمك القانوني الكامل\",\n  \"isReadOnly\": false,\n  \"isVisible\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/forms/1/fields",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "forms", "1", "fields"]
+            },
+            "description": "POST /admin/forms/:formId/fields — adds a new field to the form."
+          }
+        },
+        {
+          "name": "Update Field",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"labelEn\": \"Full Applicant Name\",\n  \"isRequired\": true,\n  \"displayOrder\": 2\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/forms/1/fields/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "forms", "1", "fields", "1"]
+            },
+            "description": "PATCH /admin/forms/:formId/fields/:fieldId — partially updates a field (all fields optional)."
+          }
+        },
+        {
+          "name": "Remove Field",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/forms/1/fields/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "forms", "1", "fields", "1"]
+            },
+            "description": "DELETE /admin/forms/:formId/fields/:fieldId — removes a field (204)."
+          }
+        },
+        {
+          "name": "Add Option (Dropdown/Radio/Multi-Select)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"optionKey\": \"OPTION_YES\",\n  \"optionLabelEn\": \"Yes\",\n  \"optionLabelAr\": \"نعم\",\n  \"optionValue\": \"YES\",\n  \"displayOrder\": 1,\n  \"isActive\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/forms/1/fields/1/options",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "forms", "1", "fields", "1", "options"]
+            },
+            "description": "POST /admin/forms/:formId/fields/:fieldId/options — adds a selectable option to a DROPDOWN / RADIO / MULTI_SELECT field."
+          }
+        },
+        {
+          "name": "Remove Option",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/forms/1/fields/1/options/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "forms", "1", "fields", "1", "options", "1"]
+            },
+            "description": "DELETE /admin/forms/:formId/fields/:fieldId/options/:optionId — removes an option (204)."
+          }
+        },
+        {
+          "name": "Add Dependency",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"dependsOnFieldId\": 2,\n  \"conditionOperator\": \"EQ\",\n  \"conditionValue\": \"YES\",\n  \"action\": \"SHOW\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/forms/1/fields/1/dependencies",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "forms", "1", "fields", "1", "dependencies"]
+            },
+            "description": "POST /admin/forms/:formId/fields/:fieldId/dependencies — adds a show/hide/require rule. conditionOperator: EQ | NEQ | GT | GTE | LT | LTE | CONTAINS | IS_EMPTY | IS_NOT_EMPTY. action: SHOW | HIDE | REQUIRE | DISABLE."
+          }
+        },
+        {
+          "name": "Remove Dependency",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/forms/1/fields/1/dependencies/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "forms", "1", "fields", "1", "dependencies", "1"]
+            },
+            "description": "DELETE /admin/forms/:formId/fields/:fieldId/dependencies/:dependencyId — removes a dependency rule (204)."
+          }
+        },
+        {
+          "name": "Add Column (Table/Grid)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"columnKey\": \"QUANTITY\",\n  \"labelEn\": \"Quantity\",\n  \"labelAr\": \"الكمية\",\n  \"displayOrder\": 1,\n  \"dataTypeId\": 2,\n  \"controlTypeId\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/forms/1/fields/1/columns",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "forms", "1", "fields", "1", "columns"]
+            },
+            "description": "POST /admin/forms/:formId/fields/:fieldId/columns — adds a column to a TABLE/GRID field."
+          }
+        },
+        {
+          "name": "Remove Column",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/forms/1/fields/1/columns/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "forms", "1", "fields", "1", "columns", "1"]
+            },
+            "description": "DELETE /admin/forms/:formId/fields/:fieldId/columns/:columnId — removes a column (204)."
+          }
+        },
+        {
+          "name": "Add Row (Table/Grid)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rowKey\": \"ROW_TOTAL\",\n  \"labelEn\": \"Total\",\n  \"labelAr\": \"الإجمالي\",\n  \"displayOrder\": 1,\n  \"isRequired\": false,\n  \"isReadOnly\": true,\n  \"isVisible\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/forms/1/fields/1/rows",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "forms", "1", "fields", "1", "rows"]
+            },
+            "description": "POST /admin/forms/:formId/fields/:fieldId/rows — adds a row to a TABLE/GRID field."
+          }
+        },
+        {
+          "name": "Remove Row",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/forms/1/fields/1/rows/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "forms", "1", "fields", "1", "rows", "1"]
+            },
+            "description": "DELETE /admin/forms/:formId/fields/:fieldId/rows/:rowId — removes a row (204)."
+          }
+        },
+        {
+          "name": "Set Calculation",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"formulaExpression\": \"A * B\",\n  \"resultDataTypeId\": 2,\n  \"resultControlTypeId\": 1,\n  \"resultColumnKey\": \"TOTAL\",\n  \"resultLabelEn\": \"Total Amount\",\n  \"resultLabelAr\": \"المبلغ الإجمالي\",\n  \"resultPrecision\": 2,\n  \"buttonLabelEn\": \"Calculate\",\n  \"buttonLabelAr\": \"احسب\",\n  \"helpTextEn\": \"Quantity multiplied by unit price\",\n  \"helpTextAr\": \"الكمية مضروبة في سعر الوحدة\",\n  \"displayFormulaEn\": \"Total = Quantity × Unit Price\",\n  \"displayFormulaAr\": \"الإجمالي = الكمية × سعر الوحدة\",\n  \"inputs\": [\n    {\n      \"inputToken\": \"A\",\n      \"columnKey\": \"QUANTITY\",\n      \"labelEn\": \"Quantity\",\n      \"labelAr\": \"الكمية\",\n      \"dataTypeId\": 2,\n      \"controlTypeId\": 1,\n      \"displayOrder\": 1,\n      \"isRequired\": true,\n      \"isVisible\": true\n    },\n    {\n      \"inputToken\": \"B\",\n      \"columnKey\": \"UNIT_PRICE\",\n      \"labelEn\": \"Unit Price\",\n      \"labelAr\": \"سعر الوحدة\",\n      \"dataTypeId\": 2,\n      \"controlTypeId\": 1,\n      \"displayOrder\": 2,\n      \"isRequired\": true,\n      \"isVisible\": true\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/forms/1/fields/1/calculation",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "forms", "1", "fields", "1", "calculation"]
+            },
+            "description": "POST /admin/forms/:formId/fields/:fieldId/calculation — creates or replaces the calculation for a CALCULATED field (inputs are inline)."
+          }
+        },
+        {
+          "name": "Remove Calculation",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/forms/1/fields/1/calculation",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "forms", "1", "fields", "1", "calculation"]
+            },
+            "description": "DELETE /admin/forms/:formId/fields/:fieldId/calculation — removes the calculation and all its inputs (204)."
+          }
+        },
+        {
+          "name": "Add Calculation Input",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"inputToken\": \"C\",\n  \"columnKey\": \"TAX_RATE\",\n  \"labelEn\": \"Tax Rate\",\n  \"labelAr\": \"نسبة الضريبة\",\n  \"dataTypeId\": 2,\n  \"controlTypeId\": 1,\n  \"displayOrder\": 3,\n  \"isRequired\": true,\n  \"isVisible\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/forms/1/fields/1/calculation/inputs",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "forms", "1", "fields", "1", "calculation", "inputs"]
+            },
+            "description": "POST /admin/forms/:formId/fields/:fieldId/calculation/inputs — adds a single input variable to an existing calculation."
+          }
+        },
+        {
+          "name": "Remove Calculation Input",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/forms/1/fields/1/calculation/inputs/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "forms", "1", "fields", "1", "calculation", "inputs", "1"]
+            },
+            "description": "DELETE /admin/forms/:formId/fields/:fieldId/calculation/inputs/:inputId — removes a single input from a calculation (204)."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin / Lookups",
+      "item": [
+        {
+          "name": "Get Control Types",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/lookups/control-types",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "lookups", "control-types"]
+            },
+            "description": "GET /admin/lookups/control-types — e.g. TEXTBOX, DROPDOWN, TABLE, CALCULATED."
+          }
+        },
+        {
+          "name": "Get Data Types",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/lookups/data-types",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "lookups", "data-types"]
+            },
+            "description": "GET /admin/lookups/data-types — e.g. TEXT, NUMBER, DATE, BOOLEAN."
+          }
+        },
+        {
+          "name": "Get Lookup Types",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/lookups/lookup-types",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "lookups", "lookup-types"]
+            },
+            "description": "GET /admin/lookups/lookup-types — categories of lookup lists."
+          }
+        },
+        {
+          "name": "Get Lookup Values",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/lookups/lookup-types/1/values",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "lookups", "lookup-types", "1", "values"]
+            },
+            "description": "GET /admin/lookups/lookup-types/:lookupTypeId/values — values within a specific lookup type."
+          }
+        },
+        {
+          "name": "Get Frequencies",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/lookups/frequencies",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "lookups", "frequencies"]
+            },
+            "description": "GET /admin/lookups/frequencies — e.g. DAILY, WEEKLY, MONTHLY."
+          }
+        }
+      ]
+    }
+  ]
+}
